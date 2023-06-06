@@ -349,10 +349,10 @@ input[type="number"]::-webkit-outer-spin-button {
   margin-bottom: 22px;
   color: #ffffff;
 }
-#bvn:invalid {
+.bvn-invalid {
   background: none;
 }
-#bvn {
+.bvn {
   background-image: url("/assets/images/green-tick.svg");
   background-repeat: no-repeat;
   background-position: 95%;

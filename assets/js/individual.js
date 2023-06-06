@@ -108,30 +108,36 @@ const changeHandler = (event) => {
     case "fullName":
       {
         if (value.length === 0) {
-          console.log(typeof value);
-          document.getElementById("fullName-error-text").innerHTML =
-            "fullName is Reqired";
-          individualFormFieldValue[event.target.name].isValid = false;
-
-          fullName.classList.add("error");
+          isFieldHaveError({
+            type: "error",
+            message: "fullName is Reqired",
+            id: "fullName-error-text",
+            name: event.target.name,
+          });
         }
       }
       break;
     case "email":
       {
         if (value.length === 0) {
-          document.getElementById("email-error-text").innerHTML =
-            "Email is required";
-          email.classList.add("error");
+          isFieldHaveError({
+            type: "error",
+            message: "Email is required",
+            id: "email-error-text",
+            name: event.target.name,
+          });
         }
       }
       break;
     case "password":
       {
         if (value.length === 0) {
-          document.getElementById("password-error-text").innerHTML =
-            "Password is required";
-          password.classList.add("error");
+          isFieldHaveError({
+            type: "error",
+            message: "Password is required",
+            id: "password-error-text",
+            name: event.target.name,
+          });
         }
       }
       break;

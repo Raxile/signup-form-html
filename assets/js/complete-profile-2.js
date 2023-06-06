@@ -10,10 +10,14 @@ const isFieldHaveError = (obj) => {
   if (type === "error") {
     document.getElementById(id).innerHTML = message;
     targetFeild.classList.add("error");
+    targetFeild.classList.remove("bvn");
+    targetFeild.classList.add("bvn-invalid");
     individualFormFieldValue[name].isValid = false;
   } else if (type === "success") {
     document.getElementById(id).innerHTML = "";
     targetFeild.classList.remove("error");
+    targetFeild.classList.remove("bvn-invalid");
+    targetFeild.classList.add("bvn");
     individualFormFieldValue[name].isValid = true;
   }
   checkFormIsValid();
@@ -69,9 +73,12 @@ const changeHandler = (event) => {
     case "bvn":
       {
         if (value.length === 0) {
-          document.getElementById("phone-error-text").innerHTML =
-            "phoneNumber is required";
-          bvn.classList.add("error");
+          isFieldHaveError({
+            type: "error",
+            message: "Bank number should have 15 character",
+            id: "bvn-error-text",
+            name: event.target.name,
+          });
         }
       }
       break;

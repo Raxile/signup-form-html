@@ -101,18 +101,24 @@ const changeHandler = (event) => {
     case "phoneNumber":
       {
         if (value.length === 0) {
-          document.getElementById("phone-error-text").innerHTML =
-            "phoneNumber is required";
-          phoneNumber.classList.add("error");
+          isFieldHaveError({
+            type: "error",
+            message: "phoneNumber is required",
+            id: "phone-error-text",
+            name: event.target.name,
+          });
         }
       }
       break;
     case "address":
       {
         if (value.length === 0) {
-          document.getElementById("address-error-text").innerHTML =
-            "address is required";
-          address.classList.add("error");
+          isFieldHaveError({
+            type: "error",
+            message: "address is required",
+            id: "address-error-text",
+            name: event.target.name,
+          });
         }
       }
       break;

@@ -20,7 +20,11 @@
   <body>
     <main class="main">
       <section class="h-100 side-image">
-        <div class="d-flex align-items-end gap-10px cursor-pointer" id="logo">
+        <a
+          class="d-flex align-items-end gap-10px cursor-pointertext-decoration-none"
+          href="/"
+          id="logo"
+        >
           <div class="logo-container">
             <img
               src="/assets/images/Union.svg"
@@ -29,7 +33,7 @@
             />
           </div>
           <span class="company-name">Oasis</span>
-        </div>
+        </a>
         <div class="d-flex align-items-center h-100">
           <div>
             <span class="quotations-marks">“</span>
@@ -75,33 +79,26 @@
             </div>
             <span class="divide-line my-3"></span>
             <form id="completeProfile" class="mt-2 custom-form">
-              <div class="d-flex flex-column gap-14px">
+              <div class="d-flex flex-column gap-14px position-relative">
                 <label for="phone" class="text_xsmall"> Phone number </label>
-                <!-- <input
-                  type="number"
-                  id="phone"
-                  name="phone"
-                  placeholder="Enter Phone"
-                  class="input-feild"
-                  value="9695338437"
-                /> -->
                 <div
                   class="input-feild d-flex justify-content-center align-items-center"
                   id="phone"
                 >
-                  <select name="country-code" id="country-code">
+                  <select name="phoneCode" id="phoneCode">
                     <option value="+91">+91</option>
                     <option selected value="+234">+234</option>
                   </select>
                   <input
                     type="number"
+                    name="phoneNumber"
                     placeholder="Please enter number"
-                    value="090912345567"
-                    id="phone-number"
+                    id="phoneNumber"
                   />
+                  <span class="error-text" id="phone-error-text"></span>
                 </div>
               </div>
-              <div class="d-flex flex-column gap-14px">
+              <div class="d-flex flex-column gap-14px position-relative">
                 <label for="address" class="text_xsmall">Your address </label>
                 <input
                   type="text"
@@ -110,8 +107,9 @@
                   placeholder="Please enter address"
                   class="input-feild"
                 />
+                <span class="error-text" id="address-error-text"></span>
               </div>
-              <div class="d-flex flex-column gap-14px">
+              <div class="d-flex flex-column gap-14px position-relative">
                 <label for="country" class="text_xsmall">
                   Country of residence</label
                 >
@@ -127,6 +125,7 @@
                   <option value="India">India</option>
                   <option value="Australia">Australia</option>
                 </select>
+                <span class="error-text" id="country-error-text"></span>
               </div>
               <button class="submit-button mt-28px">Save & Continue</button>
             </form>
@@ -145,17 +144,7 @@
     crossorigin="anonymous"
   ></script>
   <script>
-    const handleSubmitEvent1 = (e) => {
-      e.preventDefault();
-      window.location.href = "/complete-profile-2.html";
-    };
-    const individual = document.querySelector("#completeProfile");
-    individual.addEventListener("submit", (e) => handleSubmitEvent1(e));
-
-    const logo = document.querySelector("#logo");
-    logo.addEventListener("click", () => (window.location.href = "/"));
-
-    const inputField = document.getElementById("phone-number");
+    const inputField = document.getElementById("phoneNumber");
     const divElement = document.getElementById("phone");
 
     inputField.addEventListener("focus", () => {
@@ -166,4 +155,5 @@
       divElement.classList.remove("active");
     });
   </script>
+  <script src="/assets/js/complete-profie.js"></script>
 </html>

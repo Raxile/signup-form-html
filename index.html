@@ -16,7 +16,11 @@
   <body>
     <main>
       <section class="h-100 side-image">
-        <div class="d-flex align-items-end gap-10px cursor-pointer" id="logo">
+        <a
+          class="d-flex align-items-end gap-10px cursor-pointertext-decoration-none"
+          href="/"
+          id="logo"
+        >
           <div class="logo-container">
             <img
               src="/assets/images/Union.svg"
@@ -25,7 +29,7 @@
             />
           </div>
           <span class="company-name">Oasis</span>
-        </div>
+        </a>
         <div class="d-flex align-items-center h-100">
           <div>
             <span class="quotations-marks">“</span>
@@ -67,8 +71,9 @@
                 opening.
               </p>
             </div>
-            <div
-              class="d-flex flex-row card align-items-center"
+            <a
+              href="/individual.html"
+              class="d-flex flex-row card align-items-center text-decoration-none"
               id="individual"
             >
               <div
@@ -86,7 +91,7 @@
                 </div>
                 <i class="fas fa-arrow-right" aria-hidden="true"></i>
               </div>
-            </div>
+            </a>
             <div class="d-flex flex-row card align-items-center">
               <div class="polygon-icon d-flex justify-content-center">
                 <i class="fas fa-briefcase d-flex align-items-center"></i>
@@ -111,14 +116,5 @@
     src="https://kit.fontawesome.com/294e7999e9.js"
     crossorigin="anonymous"
   ></script>
-  <script>
-    const handleClickEvent = () => {
-      window.location.href = "/individual.html";
-    };
-    const individual = document.querySelector("#individual");
-    individual.addEventListener("click", handleClickEvent);
-
-    const logo = document.querySelector("#logo");
-    logo.addEventListener("click", () => (window.location.href = "/"));
-  </script>
+  <script src="assets/js/index.js"></script>
 </html>

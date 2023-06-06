@@ -3,7 +3,6 @@
   padding: 0;
   font-family: "Inter";
 }
-
 .main-container {
   width: 54.17%;
   padding: 70.5px 82px;
@@ -12,7 +11,17 @@
   width: 54.17%;
   padding: 75px 82px;
 }
-
+.error {
+  border: 1px solid red !important;
+}
+.error-text {
+  color: red;
+  position: absolute;
+  bottom: -22px;
+  left: 1%;
+  font-size: 12px;
+  font-weight: 500;
+}
 .cursor-pointer {
   cursor: pointer;
 }
@@ -228,7 +237,9 @@ input[type="number"]::-webkit-outer-spin-button {
   box-shadow: 0px 4px 10px 3px rgba(0, 0, 0, 0.11);
   outline: -webkit-focus-ring-color none;
 }
-
+.text-decoration-none {
+  text-decoration: none;
+}
 .submit-button {
   box-sizing: border-box;
   width: 426px;
@@ -241,17 +252,26 @@ input[type="number"]::-webkit-outer-spin-button {
   font-size: 16px;
   line-height: 19px;
 }
-.google-login-btn {
+.submit-button-disabled {
+  border: 1px solid rgba(21, 102, 216, 0.7);
+  background-color: rgba(21, 101, 216, 0.7);
+  cursor: not-allowed;
   box-sizing: border-box;
   width: 426px;
-  padding-left: 42px;
+  padding: 0px 30px;
+  height: 64px;
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 16px;
+  line-height: 19px;
+}
+.google-login-btn {
+  position: relative;
+  box-sizing: border-box;
+  width: 426px;
   height: 64px;
   border: 1px solid #ffffff;
   background-color: #ffffff;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 60px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
   border-radius: 6px;
   margin-top: 1px;
@@ -260,6 +280,13 @@ input[type="number"]::-webkit-outer-spin-button {
   font-size: 16px;
   line-height: 19px;
   color: #000000;
+}
+.google-login-btn > img {
+  position: absolute;
+  left: 42px;
+}
+.fa-angle-left {
+  margin-right: 8px;
 }
 .google-login-btn:hover,
 .google-login-btn:active,
@@ -351,16 +378,16 @@ input::placeholder {
   background-position: 30px;
   padding-left: 43px;
 }
-#phone-number,
-#country-code {
+#phoneNumber,
+#phoneCode {
   border: 1px solid transparent;
   background-color: #ffffff;
 }
-#phone-number {
+#phoneNumber {
   width: 60%;
   margin-left: 40px;
 }
-#country-code {
+#phoneCode {
   background-image: url("/assets/images/Vector.svg");
   background-repeat: no-repeat;
   background-position: 95%;
@@ -369,14 +396,14 @@ input::placeholder {
   width: 18%;
   color: rgba(134, 146, 166, 1);
 }
-#phone-number:hover,
-#phone-number:focus-visible,
-#phone-number:focus,
-#phone-number:active,
-#country-code:hover,
-#country-code:focus-visible,
-#country-code:focus,
-#country-code:active {
+#phoneNumber:hover,
+#phoneNumber:focus-visible,
+#phoneNumber:focus,
+#phoneNumber:active,
+#phoneCode:hover,
+#phoneCode:focus-visible,
+#phoneCode:focus,
+#phoneCode:active {
   border: 1px solid transparent;
   outline: -webkit-focus-ring-color none;
 }
@@ -492,10 +519,10 @@ input::placeholder {
     background-position: 17px;
   }
 
-  #phone-number {
+  #phoneNumber {
     margin-left: 15px;
   }
-  #country-code {
+  #phoneCode {
     width: 26%;
   }
 }

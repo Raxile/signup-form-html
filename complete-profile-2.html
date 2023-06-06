@@ -10,17 +10,15 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
     />
     <link rel="stylesheet" href="/assets//css/style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@1,700&display=swap"
-      rel="stylesheet"
-    />
   </head>
   <body>
     <main class="main">
       <section class="h-100 side-image">
-        <div class="d-flex align-items-end gap-10px cursor-pointer" id="logo">
+        <a
+          class="d-flex align-items-end gap-10px cursor-pointertext-decoration-none"
+          href="/"
+          id="logo"
+        >
           <div class="logo-container">
             <img
               src="/assets/images/Union.svg"
@@ -29,7 +27,7 @@
             />
           </div>
           <span class="company-name">Oasis</span>
-        </div>
+        </a>
         <div class="d-flex align-items-center h-100">
           <div>
             <span class="quotations-marks">“</span>
@@ -74,7 +72,7 @@
             </div>
             <span class="divide-line mb-4"></span>
             <form id="completeProfile2" class="custom-form">
-              <div class="d-flex flex-column gap-14px">
+              <div class="d-flex flex-column gap-14px position-relative">
                 <label for="bvn" class="text_xsmall">
                   Bank verification number (BVN)
                 </label>
@@ -86,6 +84,7 @@
                   class="input-feild"
                   required
                 />
+                <span class="error-text" id="bvn-error-text"></span>
               </div>
               <button class="submit-button mt-70px">Save & Continue</button>
             </form>
@@ -103,14 +102,5 @@
     src="https://kit.fontawesome.com/294e7999e9.js"
     crossorigin="anonymous"
   ></script>
-  <script>
-    const handleSubmitEvent2 = (e) => {
-      e.preventDefault();
-    };
-    const individual = document.querySelector("#completeProfile2");
-    individual.addEventListener("submit", (e) => handleSubmitEvent2(e));
-
-    const logo = document.querySelector("#logo");
-    logo.addEventListener("click", () => (window.location.href = "/"));
-  </script>
+  <script src="assets/js/complete-profile-2.js"></script>
 </html>

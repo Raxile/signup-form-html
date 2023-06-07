@@ -1,5 +1,5 @@
 const FORMISVALID = "formIsValid";
-const FULLNAMEREGEX = /^(\*?[A-Za-z]+\s+?[A-Za-z])|(\*?[A-Za-z])+$/;
+const FULLNAMEREGEX = /^[A-Za-z ]{3,20}$/;
 const EMAILREGEX = /^\S+@+\S+.+\S+$/;
 const ERRORTEXTID = {
   EMAILTEXTID: "email-error-text",
@@ -20,7 +20,7 @@ const ERRORMESSAGE = {
 
   PASSWORDMESSAGE: {
     REQUIRED: "Password is required",
-    VALID: "PLEASE ENTER A STRONG PASSWORD",
+    VALID: "Please enter a strong Password",
   },
 };
 /**

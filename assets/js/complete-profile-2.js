@@ -1,61 +1,80 @@
-// ! Object
+const ERRORMESSAGE = "Bank number should have 15 character";
+const ERRORTEXTID = "bvn-error-text";
+const FORMISVALID = "formIsValid";
+/**
+ * declare all variable which initailize the element selected by getElementById
+ */
+const bvn = document.getElementById("bvn");
+const registerForm = document.getElementById("completeProfile2");
+
+/**
+ * individualFormFieldValue is a object that stores the value of each field and also indicates each feild is valid or form is valid or not
+ */
 let individualFormFieldValue = {
   bvn: { value: "", isValid: false },
   formIsValid: false,
 };
 
-const isFieldHaveError = (obj) => {
-  const { type, message, id, name } = obj;
-  const targetFeild = document.getElementById(name);
-  if (type === "error") {
-    document.getElementById(id).innerHTML = message;
-    targetFeild.classList.add("error");
+/**
+ * checkFormIsValid checks the all feild is valid so form is valid
+ */
+const checkFormIsValid = () => {
+  let count = 0;
+  const arrayOfKeys = Object.keys(individualFormFieldValue);
+  const totalFeilds = arrayOfKeys.length - 1;
+  arrayOfKeys.forEach((element) => {
+    if (
+      individualFormFieldValue[element] !== FORMISVALID &&
+      individualFormFieldValue[element].isValid
+    )
+      ++count;
+  });
+  if (count === totalFeilds) {
+    individualFormFieldValue.formIsValid = true;
+  } else {
+    individualFormFieldValue.formIsValid = false;
+  }
+};
+/**
+ * isFieldHaveError function if input field have error so return error or otherwise set Feild is valid
+ * @param {*this object error ,message ,errorTextId,targetInputName} inputFieldObj
+ */
+const isFieldHaveError = (inputFieldObj) => {
+  const { isError, message, errorTextId, targetInputName } = inputFieldObj;
+  const targetFeild = document.getElementById(targetInputName);
+  if (isError) {
+    document.getElementById(errorTextId).innerHTML = message;
+    targetFeild.classList.add("input-border-red");
     targetFeild.classList.remove("bvn");
     targetFeild.classList.add("bvn-invalid");
-    individualFormFieldValue[name].isValid = false;
-  } else if (type === "success") {
-    document.getElementById(id).innerHTML = "";
-    targetFeild.classList.remove("error");
+    individualFormFieldValue[targetInputName].isValid = false;
+  } else {
+    document.getElementById(errorTextId).innerHTML = "";
+    targetFeild.classList.remove("input-border-red");
     targetFeild.classList.remove("bvn-invalid");
     targetFeild.classList.add("bvn");
-    individualFormFieldValue[name].isValid = true;
+    individualFormFieldValue[targetInputName].isValid = true;
   }
   checkFormIsValid();
 };
-const checkFormIsValid = () => {
-  const count = Object.keys(individualFormFieldValue).reduce(
-    (accumulator, currentValue) => {
-      if (currentValue !== "formIsValid") {
-        if (individualFormFieldValue[currentValue].isValid) {
-          ++accumulator;
-        }
-      }
-      return accumulator;
-    },
-    0
-  );
-  if (count === 1) {
-    individualFormFieldValue.formIsValid = true;
-  } else individualFormFieldValue.formIsValid = false;
-};
 
-const isFieldEmpty = (event) => {
+const checkFeildIsValid = (event) => {
   const { value } = individualFormFieldValue[event.target.name];
   switch (event.target.name) {
     case "bvn":
       {
         if (value.length <= 15) {
           isFieldHaveError({
-            type: "error",
-            message: "Bank number should have 15 character",
-            id: "bvn-error-text",
-            name: event.target.name,
+            isError: true,
+            message: ERRORMESSAGE,
+            errorTextId: ERRORTEXTID,
+            targetInputName: event.target.name,
           });
         } else {
           isFieldHaveError({
-            type: "success",
-            id: "bvn-error-text",
-            name: event.target.name,
+            isError: false,
+            errorTextId: ERRORTEXTID,
+            targetInputName: event.target.name,
           });
         }
       }
@@ -74,10 +93,10 @@ const changeHandler = (event) => {
       {
         if (value.length === 0) {
           isFieldHaveError({
-            type: "error",
-            message: "Bank number should have 15 character",
-            id: "bvn-error-text",
-            name: event.target.name,
+            isError: true,
+            message: ERRORMESSAGE,
+            errorTextId: ERRORTEXTID,
+            targetInputName: event.target.name,
           });
         }
       }
@@ -97,17 +116,12 @@ const handleSubmitEvent = (e) => {
     };
     console.log(formValue);
     localStorage.setItem("step-4", JSON.stringify(formValue));
-
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 1000);
+    window.location.href = "/";
   } else {
     console.log("error : try submit form without filling");
   }
 };
-const bvn = document.getElementById("bvn");
 bvn.addEventListener("change", changeHandler);
-bvn.addEventListener("blur", isFieldEmpty);
+bvn.addEventListener("blur", checkFeildIsValid);
 
-const registerForm = document.getElementById("completeProfile2");
 registerForm.addEventListener("submit", (e) => handleSubmitEvent(e));

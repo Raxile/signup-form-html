@@ -1,4 +1,25 @@
-// ! Object
+const FORMISVALID = "formIsValid";
+const ERRORTEXTID = {
+  ADDRESSTEXTID: "address-error-text",
+  COUNTRYTEXTID: "country-error-text",
+  PHONETEXTID: "phone-error-text",
+};
+const ERRORMESSAGE = {
+  COUNTRYMESSAGE: "Select a country",
+  ADDRESSMESSAGE: {
+    MIN: "address should have atleast 3 character",
+    REQUIRED: "Address is required",
+  },
+
+  PHONENUMBERMESSAGE: {
+    REQUIRED: "Phone number is required",
+    VALID: "Enter valid Phone number",
+  },
+};
+
+/**
+ * individualFormFieldValue is a object that stores the value of each field and also indicates each feild is valid or form is valid or not
+ */
 let individualFormFieldValue = {
   phoneCode: { value: "", isValid: false },
   phoneNumber: { value: "", isValid: false },
@@ -6,40 +27,71 @@ let individualFormFieldValue = {
   country: { value: "", isValid: false },
   formIsValid: false,
 };
+/**
+ * declare all variable which initailize the element selected by getElementById
+ */
+const phoneCode = document.getElementById("phoneCode");
+const address = document.getElementById("address");
+const phoneNumber = document.getElementById("phoneNumber");
+const registerForm = document.getElementById("completeProfile");
+const country = document.getElementById("country");
 
-const isFieldHaveError = (obj) => {
-  const { type, message, id, name } = obj;
-  const targetFeild = document.getElementById(name);
-  if (type === "error") {
-    document.getElementById(id).innerHTML = message;
-    targetFeild.classList.add("error");
-    individualFormFieldValue[name].isValid = false;
-  } else if (type === "success") {
-    document.getElementById(id).innerHTML = "";
-    targetFeild.classList.remove("error");
-    individualFormFieldValue[name].isValid = true;
+/**
+ * checkFormIsValid checks the all feild is valid so form is valid
+ */
+const checkFormIsValid = () => {
+  let count = 0;
+  const arrayOfKeys = Object.keys(individualFormFieldValue);
+  const totalFeilds = arrayOfKeys.length - 1;
+  arrayOfKeys.forEach((element) => {
+    if (
+      individualFormFieldValue[element] !== FORMISVALID &&
+      individualFormFieldValue[element].isValid
+    )
+      ++count;
+  });
+  if (count === totalFeilds) {
+    individualFormFieldValue.formIsValid = true;
+  } else {
+    individualFormFieldValue.formIsValid = false;
+  }
+};
+/**
+ * isFieldHaveError function if input field have error so return error or otherwise set Feild is valid
+ * @param {*this object error ,message ,errorTextId,targetInputName} inputFieldObj
+ */
+const isFieldHaveError = (inputFieldObj) => {
+  const { isError, message, errorTextId, targetInputName } = inputFieldObj;
+  const targetFeild = document.getElementById(targetInputName);
+  if (isError) {
+    document.getElementById(errorTextId).innerHTML = message;
+    targetFeild.classList.add("input-border-red");
+    individualFormFieldValue[targetInputName].isValid = false;
+  } else {
+    document.getElementById(errorTextId).innerHTML = "";
+    targetFeild.classList.remove("input-border-red");
+    individualFormFieldValue[targetInputName].isValid = true;
   }
   checkFormIsValid();
 };
 
-// const checkFieldsIsValid = (event) =>
-const isFieldEmpty = (event) => {
+const checkFeildIsValid = (event) => {
   const { value } = individualFormFieldValue[event.target.name];
   switch (event.target.name) {
     case "address":
       {
         if (value.length <= 3) {
           isFieldHaveError({
-            type: "error",
-            message: "address should have atleast 3 character",
-            id: "address-error-text",
-            name: event.target.name,
+            isError: true,
+            message: ERRORMESSAGE.ADDRESSMESSAGE.MIN,
+            errorTextId: ERRORTEXTID.ADDRESSTEXTID,
+            targetInputName: event.target.name,
           });
         } else {
           isFieldHaveError({
-            type: "success",
-            id: "address-error-text",
-            name: event.target.name,
+            isError: false,
+            errorTextId: ERRORTEXTID.ADDRESSTEXTID,
+            targetInputName: event.target.name,
           });
         }
       }
@@ -48,16 +100,16 @@ const isFieldEmpty = (event) => {
       {
         if (!value) {
           isFieldHaveError({
-            type: "error",
-            message: "Select a country",
-            id: "country-error-text",
-            name: event.target.name,
+            isError: true,
+            message: ERRORMESSAGE.COUNTRYMESSAGE,
+            errorTextId: ERRORTEXTID.COUNTRYTEXTID,
+            targetInputName: event.target.name,
           });
         } else {
           isFieldHaveError({
-            type: "success",
-            id: "country-error-text",
-            name: event.target.name,
+            isError: false,
+            errorTextId: ERRORTEXTID.COUNTRYTEXTID,
+            targetInputName: event.target.name,
           });
         }
       }
@@ -72,19 +124,16 @@ const isFieldEmpty = (event) => {
     case "phoneNumber":
       {
         console.log(value.length);
+        const targetField = document.getElementById("phone");
         if (value.length !== 10) {
-          const targetFeild = document.getElementById("phone");
-          document.getElementById("phone-error-text").innerHTML =
-            "Enter valid Phone number";
-          targetFeild.classList.add("error");
+          document.getElementById(ERRORTEXTID.PHONETEXTID).innerHTML =
+            ERRORMESSAGE.PHONENUMBERMESSAGE.VALID;
+          targetField.classList.add("input-border-red");
           individualFormFieldValue.phoneNumber.isValid = false;
         } else {
-          console.log(event.target.name);
-          isFieldHaveError({
-            type: "success",
-            id: "phone-error-text",
-            name: event.target.name,
-          });
+          document.getElementById(ERRORTEXTID.PHONETEXTID).innerHTML = "";
+          targetField.classList.remove("input-border-red");
+          individualFormFieldValue.phoneNumber.isValid = true;
         }
       }
       break;
@@ -101,12 +150,11 @@ const changeHandler = (event) => {
     case "phoneNumber":
       {
         if (value.length === 0) {
-          isFieldHaveError({
-            type: "error",
-            message: "phoneNumber is required",
-            id: "phone-error-text",
-            name: event.target.name,
-          });
+          const targetField = document.getElementById("phone");
+          document.getElementById(ERRORTEXTID.PHONETEXTID).innerHTML =
+            ERRORMESSAGE.PHONENUMBERMESSAGE.REQUIRED;
+          targetField.classList.add("input-border-red");
+          individualFormFieldValue.phoneNumber.isValid = false;
         }
       }
       break;
@@ -114,10 +162,10 @@ const changeHandler = (event) => {
       {
         if (value.length === 0) {
           isFieldHaveError({
-            type: "error",
-            message: "address is required",
-            id: "address-error-text",
-            name: event.target.name,
+            isError: true,
+            message: ADDRESSMESSAGE.VALID,
+            errorTextId: "address-error-text",
+            targetInputName: event.target.name,
           });
         }
       }
@@ -127,22 +175,6 @@ const changeHandler = (event) => {
   }
 };
 
-const checkFormIsValid = () => {
-  const count = Object.keys(individualFormFieldValue).reduce(
-    (accumulator, currentValue) => {
-      if (currentValue !== "formIsValid") {
-        if (individualFormFieldValue[currentValue].isValid) {
-          ++accumulator;
-        }
-      }
-      return accumulator;
-    },
-    0
-  );
-  if (count === 4) {
-    individualFormFieldValue.formIsValid = true;
-  } else individualFormFieldValue.formIsValid = false;
-};
 const handleSubmitEvent = (e) => {
   console.log(individualFormFieldValue);
   e.preventDefault();
@@ -158,29 +190,22 @@ const handleSubmitEvent = (e) => {
     console.log(formValue);
     localStorage.setItem("step-3", JSON.stringify(formValue));
 
-    setTimeout(() => {
-      window.location.href = "/complete-profile-2.html";
-    }, 1000);
+    window.location.href = "/complete-profile-2.html";
   } else {
     console.log("error : try submit form without filling");
   }
 };
 
-const phoneCode = document.getElementById("phoneCode");
 phoneCode.addEventListener("change", changeHandler);
-phoneCode.addEventListener("blur", isFieldEmpty);
+phoneCode.addEventListener("blur", checkFeildIsValid);
 
-const phoneNumber = document.getElementById("phoneNumber");
 phoneNumber.addEventListener("change", changeHandler);
-phoneNumber.addEventListener("blur", isFieldEmpty);
+phoneNumber.addEventListener("blur", checkFeildIsValid);
 
-const address = document.getElementById("address");
 address.addEventListener("change", changeHandler);
-address.addEventListener("blur", isFieldEmpty);
+address.addEventListener("blur", checkFeildIsValid);
 
-const country = document.getElementById("country");
 country.addEventListener("change", changeHandler);
-country.addEventListener("blur", isFieldEmpty);
+country.addEventListener("blur", checkFeildIsValid);
 
-const registerForm = document.getElementById("completeProfile");
 registerForm.addEventListener("submit", (e) => handleSubmitEvent(e));

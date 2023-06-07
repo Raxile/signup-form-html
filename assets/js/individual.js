@@ -1,4 +1,31 @@
-// ! Object
+const FORMISVALID = "formIsValid";
+const FULLNAMEREGEX = /^(\*?[A-Za-z]+\s+?[A-Za-z])|(\*?[A-Za-z])+$/;
+const EMAILREGEX = /^\S+@+\S+.+\S+$/;
+const ERRORTEXTID = {
+  EMAILTEXTID: "email-error-text",
+  FULLNAMETEXTID: "fullName-error-text",
+  PASSWORDTEXTID: "password-error-text",
+};
+const ERRORMESSAGE = {
+  FULLNAMEMESSAGE: {
+    REQUIRED: "Please enter Name",
+    MIN: "Name should have atleast 3 character",
+    MAX: "Name should have atmost 20 character",
+    VALID: "Please enter Valid Name",
+  },
+  EMAILMESSAGE: {
+    VALID: "Please enter valid Email",
+    REQUIRED: "Please enter Email",
+  },
+
+  PASSWORDMESSAGE: {
+    REQUIRED: "Password is required",
+    VALID: "PLEASE ENTER A STRONG PASSWORD",
+  },
+};
+/**
+ * individualFormFieldValue is a object that stores the value of each field and also indicates each feild is valid or form is valid or not
+ */
 let individualFormFieldValue = {
   fullName: { value: "", isValid: false },
   email: { value: "", isValid: false },
@@ -6,74 +33,108 @@ let individualFormFieldValue = {
   termsAndCondition: { value: false, isValid: false },
   formIsValid: false,
 };
+/**
+ * declare all variable which initailize the element selected by getElementById
+ */
+const fullName = document.getElementById("fullName");
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+const termsAndCondition = document.getElementById("termsAndCondition");
+const registerForm = document.getElementById("individual-form-step-1");
 
-const isFieldHaveError = (obj) => {
-  const { type, message, id, name } = obj;
-  const targetFeild = document.getElementById(name);
-  if (type === "error") {
-    document.getElementById(id).innerHTML = message;
-    targetFeild.classList.add("error");
-    individualFormFieldValue[name].isValid = false;
-  } else if (type === "success") {
-    document.getElementById(id).innerHTML = "";
-    targetFeild.classList.remove("error");
-    individualFormFieldValue[name].isValid = true;
+/**
+ * checkFormIsValid checks the all feild is valid so form is valid
+ */
+const checkFormIsValid = () => {
+  let count = 0;
+  const arrayOfKeys = Object.keys(individualFormFieldValue);
+  const totalFeilds = arrayOfKeys.length - 1;
+  arrayOfKeys.forEach((element) => {
+    if (
+      individualFormFieldValue[element] !== FORMISVALID &&
+      individualFormFieldValue[element].isValid
+    )
+      ++count;
+  });
+  if (count === totalFeilds) {
+    individualFormFieldValue.formIsValid = true;
+  } else {
+    individualFormFieldValue.formIsValid = false;
+  }
+};
+
+/**
+ * isFieldHaveError function if input field have error so return error or otherwise set Feild is valid
+ * @param {*this object error ,message ,errorTextId,targetInputName} inputFieldObj
+ */
+
+const isFieldHaveError = (inputFieldObj) => {
+  const { isError, message, errorTextId, targetInputName } = inputFieldObj;
+  const targetField = document.getElementById(targetInputName);
+  if (isError) {
+    document.getElementById(errorTextId).innerHTML = message;
+    targetField.classList.add("input-border-red");
+    individualFormFieldValue[targetInputName].isValid = false;
+  } else {
+    document.getElementById(errorTextId).innerHTML = "";
+    targetField.classList.remove("input-border-red");
+    individualFormFieldValue[targetInputName].isValid = true;
   }
   checkFormIsValid();
 };
-
-// const checkFieldsIsValid = (event) =>
-const isFieldEmpty = (event) => {
+/**
+ * checkFeildIsValid function called when change occured in any input
+ * @param {*this event is passed through addEventListener function } event
+ */
+const checkFeildIsValid = (event) => {
   const { value } = individualFormFieldValue[event.target.name];
   switch (event.target.name) {
     case "fullName":
       {
-        const regEx = /^(\*?[A-Za-z]+\s+?[A-Za-z])|(\*?[A-Za-z])+$/;
-        if (!regEx.test(value)) {
+        if (!FULLNAMEREGEX.test(value)) {
           isFieldHaveError({
-            type: "error",
-            message: "please enter Valid Name",
-            id: "fullName-error-text",
-            name: event.target.name,
+            isError: true,
+            message: ERRORMESSAGE.FULLNAMEMESSAGE.VALID,
+            errorTextId: ERRORTEXTID.FULLNAMETEXTID,
+            targetInputName: event.target.name,
           });
         } else if (value.length <= 3) {
           isFieldHaveError({
-            type: "error",
-            message: "name should have atleast 3 character",
-            id: "fullName-error-text",
-            name: event.target.name,
+            isError: true,
+            message: ERRORMESSAGE.FULLNAMEMESSAGE.MIN,
+            errorTextId: ERRORTEXTID.FULLNAMETEXTID,
+            targetInputName: event.target.name,
           });
         } else if (value.length >= 20) {
           isFieldHaveError({
-            type: "error",
-            message: "name should have atmost 20  character",
-            id: "fullName-error-text",
-            name: event.target.name,
+            isError: true,
+            message: ERRORMESSAGE.FULLNAMEMESSAGE.M,
+            errorTextId: ERRORTEXTID.FULLNAMETEXTID,
+            targetInputName: event.target.name,
           });
         } else {
           isFieldHaveError({
-            type: "success",
-            id: "fullName-error-text",
-            name: event.target.name,
+            isError: false,
+            errorTextId: ERRORTEXTID.FULLNAMETEXTID,
+            targetInputName: event.target.name,
           });
         }
       }
       break;
     case "email":
       {
-        const regEx = /^\S+@+\S+.+\S+$/;
-        if (!regEx.test(value)) {
+        if (!EMAILREGEX.test(value)) {
           isFieldHaveError({
-            type: "error",
-            message: "enter valid email address",
-            id: "email-error-text",
-            name: event.target.name,
+            isError: true,
+            message: ERRORMESSAGE.EMAILMESSAGE.VALID,
+            errorTextId: ERRORTEXTID.EMAILTEXTID,
+            targetInputName: event.target.name,
           });
         } else {
           isFieldHaveError({
-            type: "success",
-            id: "email-error-text",
-            name: event.target.name,
+            isError: false,
+            errorTextId: ERRORTEXTID.EMAILTEXTID,
+            targetInputName: event.target.name,
           });
         }
       }
@@ -82,16 +143,16 @@ const isFieldEmpty = (event) => {
       {
         if (value.length < 8) {
           isFieldHaveError({
-            type: "error",
-            id: "password-error-text",
-            message: "enter a strong password",
-            name: event.target.name,
+            isError: true,
+            errorTextId: ERRORTEXTID.PASSWORDTEXTID,
+            message: ERRORMESSAGE.PASSWORDMESSAGE.VALID,
+            targetInputName: event.target.name,
           });
         } else {
           isFieldHaveError({
-            type: "success",
-            id: "password-error-text",
-            name: event.target.name,
+            isError: false,
+            errorTextId: ERRORTEXTID.PASSWORDTEXTID,
+            targetInputName: event.target.name,
           });
         }
       }
@@ -100,6 +161,10 @@ const isFieldEmpty = (event) => {
       console.log("default");
   }
 };
+/**
+ * changeHandler function called when change occured in any input
+ * @param {*this event is passed through addEventListener function } event
+ */
 const changeHandler = (event) => {
   individualFormFieldValue[event.target.name].value = event.target.value;
 
@@ -109,10 +174,10 @@ const changeHandler = (event) => {
       {
         if (value.length === 0) {
           isFieldHaveError({
-            type: "error",
-            message: "fullName is Reqired",
-            id: "fullName-error-text",
-            name: event.target.name,
+            isError: true,
+            message: ERRORMESSAGE.FULLNAMEMESSAGE.REQUIRED,
+            errorTextId: ERRORTEXTID.FULLNAMETEXTID,
+            targetInputName: event.target.name,
           });
         }
       }
@@ -121,10 +186,10 @@ const changeHandler = (event) => {
       {
         if (value.length === 0) {
           isFieldHaveError({
-            type: "error",
-            message: "Email is required",
-            id: "email-error-text",
-            name: event.target.name,
+            isError: true,
+            message: ERRORMESSAGE.EMAILMESSAGE.REQUIRED,
+            errorTextId: ERRORTEXTID.EMAILTEXTID,
+            targetInputName: event.target.name,
           });
         }
       }
@@ -133,10 +198,10 @@ const changeHandler = (event) => {
       {
         if (value.length === 0) {
           isFieldHaveError({
-            type: "error",
-            message: "Password is required",
-            id: "password-error-text",
-            name: event.target.name,
+            isError: true,
+            message: ERRORMESSAGE.PASSWORDMESSAGE.REQUIRED,
+            errorTextId: ERRORTEXTID.PASSWORDTEXTID,
+            targetInputName: event.target.name,
           });
         }
       }
@@ -146,24 +211,12 @@ const changeHandler = (event) => {
   }
 };
 
-const checkFormIsValid = () => {
-  const count = Object.keys(individualFormFieldValue).reduce(
-    (accumulator, currentValue) => {
-      if (currentValue !== "formIsValid") {
-        if (individualFormFieldValue[currentValue].isValid) {
-          ++accumulator;
-        }
-      }
-      return accumulator;
-    },
-    0
-  );
-  if (count === 4) {
-    individualFormFieldValue.formIsValid = true;
-  } else individualFormFieldValue.formIsValid = false;
-};
-const handleSubmitEvent = (e) => {
-  e.preventDefault();
+/**
+ * handleSubmitEvent will call when form in submitted
+ * @param {*this event is passed through addEventListener function} event
+ */
+const handleSubmitEvent = (event) => {
+  event.preventDefault();
   const { formIsValid, fullName, email, password, termsAndCondition } =
     individualFormFieldValue;
   if (formIsValid) {
@@ -176,32 +229,27 @@ const handleSubmitEvent = (e) => {
     console.log(formValue);
     localStorage.setItem("step-2", JSON.stringify(formValue));
 
-    setTimeout(() => {
-      window.location.href = "/complete-profile.html";
-    }, 1000);
+    window.location.href = "/complete-profile.html";
   } else {
     console.log("error : try submit form without filling");
   }
 };
-
-const fullName = document.getElementById("fullName");
+/**
+ * callback function call when change and blur event call
+ */
 fullName.addEventListener("change", changeHandler);
-fullName.addEventListener("blur", isFieldEmpty);
+fullName.addEventListener("blur", checkFeildIsValid);
 
-const email = document.getElementById("email");
 email.addEventListener("change", changeHandler);
-email.addEventListener("blur", isFieldEmpty);
+email.addEventListener("blur", checkFeildIsValid);
 
-const password = document.getElementById("password");
 password.addEventListener("change", changeHandler);
-password.addEventListener("blur", isFieldEmpty);
+password.addEventListener("blur", checkFeildIsValid);
 
-const termsAndCondition = document.getElementById("termsAndCondition");
 termsAndCondition.addEventListener("change", (event) => {
   individualFormFieldValue[event.target.name].value = event.target.checked;
   individualFormFieldValue[event.target.name].isValid = event.target.checked;
   checkFormIsValid();
 });
 
-const registerForm = document.getElementById("individual-form-step-1");
 registerForm.addEventListener("submit", (e) => handleSubmitEvent(e));

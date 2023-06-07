@@ -11,7 +11,7 @@
   width: 54.17%;
   padding: 75px 82px;
 }
-.error {
+.input-border-red {
   border: 1px solid red !important;
 }
 .error-text {

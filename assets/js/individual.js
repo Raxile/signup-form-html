@@ -1,24 +1,24 @@
-const FORMISVALID = "formIsValid";
-const FULLNAMEREGEX = /^[A-Za-z ]{3,20}$/;
-const EMAILREGEX = /^\S+@+\S+.+\S+$/;
-const ERRORTEXTID = {
-  EMAILTEXTID: "email-error-text",
-  FULLNAMETEXTID: "fullName-error-text",
-  PASSWORDTEXTID: "password-error-text",
+const FORM_IS_VALID = "formIsValid";
+const FULL_NAME_REGEX = /^[A-Za-z ]{3,20}$/;
+const EMAIL_REGEX = /^\S+@+\S+.+\S+$/;
+const ERROR_TEXT_ID = {
+  EMAIL_TEXT_ID: "email-error-text",
+  FULL_NAME_TEXT_ID: "fullName-error-text",
+  PASSWORD_TEXT_ID: "password-error-text",
 };
-const ERRORMESSAGE = {
-  FULLNAMEMESSAGE: {
+const ERROR_MESSAGE = {
+  FULL_NAME_MESSAGE: {
     REQUIRED: "Please enter Name",
     MIN: "Name should have atleast 3 character",
     MAX: "Name should have atmost 20 character",
     VALID: "Please enter Valid Name",
   },
-  EMAILMESSAGE: {
+  EMAIL_MESSAGE: {
     VALID: "Please enter valid Email",
     REQUIRED: "Please enter Email",
   },
 
-  PASSWORDMESSAGE: {
+  PASSWORD_MESSAGE: {
     REQUIRED: "Password is required",
     VALID: "Please enter a strong Password",
   },
@@ -51,7 +51,7 @@ const checkFormIsValid = () => {
   const totalFeilds = arrayOfKeys.length - 1;
   arrayOfKeys.forEach((element) => {
     if (
-      individualFormFieldValue[element] !== FORMISVALID &&
+      individualFormFieldValue[element] !== FORM_IS_VALID &&
       individualFormFieldValue[element].isValid
     )
       ++count;
@@ -91,31 +91,31 @@ const checkFeildIsValid = (event) => {
   switch (event.target.name) {
     case "fullName":
       {
-        if (!FULLNAMEREGEX.test(value)) {
+        if (!FULL_NAME_REGEX.test(value)) {
           isFieldHaveError({
             isError: true,
-            message: ERRORMESSAGE.FULLNAMEMESSAGE.VALID,
-            errorTextId: ERRORTEXTID.FULLNAMETEXTID,
+            message: ERROR_MESSAGE.FULL_NAME_MESSAGE.VALID,
+            errorTextId: ERROR_TEXT_ID.FULL_NAME_TEXT_ID,
             targetInputName: event.target.name,
           });
         } else if (value.length <= 3) {
           isFieldHaveError({
             isError: true,
-            message: ERRORMESSAGE.FULLNAMEMESSAGE.MIN,
-            errorTextId: ERRORTEXTID.FULLNAMETEXTID,
+            message: ERROR_MESSAGE.FULL_NAME_MESSAGE.MIN,
+            errorTextId: ERROR_TEXT_ID.FULL_NAME_TEXT_ID,
             targetInputName: event.target.name,
           });
         } else if (value.length >= 20) {
           isFieldHaveError({
             isError: true,
-            message: ERRORMESSAGE.FULLNAMEMESSAGE.M,
-            errorTextId: ERRORTEXTID.FULLNAMETEXTID,
+            message: ERROR_MESSAGE.FULL_NAME_MESSAGE.M,
+            errorTextId: ERROR_TEXT_ID.FULL_NAME_TEXT_ID,
             targetInputName: event.target.name,
           });
         } else {
           isFieldHaveError({
             isError: false,
-            errorTextId: ERRORTEXTID.FULLNAMETEXTID,
+            errorTextId: ERROR_TEXT_ID.FULL_NAME_TEXT_ID,
             targetInputName: event.target.name,
           });
         }
@@ -123,17 +123,17 @@ const checkFeildIsValid = (event) => {
       break;
     case "email":
       {
-        if (!EMAILREGEX.test(value)) {
+        if (!EMAIL_REGEX.test(value)) {
           isFieldHaveError({
             isError: true,
-            message: ERRORMESSAGE.EMAILMESSAGE.VALID,
-            errorTextId: ERRORTEXTID.EMAILTEXTID,
+            message: ERROR_MESSAGE.EMAIL_MESSAGE.VALID,
+            errorTextId: ERROR_TEXT_ID.EMAIL_TEXT_ID,
             targetInputName: event.target.name,
           });
         } else {
           isFieldHaveError({
             isError: false,
-            errorTextId: ERRORTEXTID.EMAILTEXTID,
+            errorTextId: ERROR_TEXT_ID.EMAIL_TEXT_ID,
             targetInputName: event.target.name,
           });
         }
@@ -144,14 +144,14 @@ const checkFeildIsValid = (event) => {
         if (value.length < 8) {
           isFieldHaveError({
             isError: true,
-            errorTextId: ERRORTEXTID.PASSWORDTEXTID,
-            message: ERRORMESSAGE.PASSWORDMESSAGE.VALID,
+            errorTextId: ERROR_TEXT_ID.PASSWORD_TEXT_ID,
+            message: ERROR_MESSAGE.PASSWORD_MESSAGE.VALID,
             targetInputName: event.target.name,
           });
         } else {
           isFieldHaveError({
             isError: false,
-            errorTextId: ERRORTEXTID.PASSWORDTEXTID,
+            errorTextId: ERROR_TEXT_ID.PASSWORD_TEXT_ID,
             targetInputName: event.target.name,
           });
         }
@@ -175,8 +175,8 @@ const changeHandler = (event) => {
         if (value.length === 0) {
           isFieldHaveError({
             isError: true,
-            message: ERRORMESSAGE.FULLNAMEMESSAGE.REQUIRED,
-            errorTextId: ERRORTEXTID.FULLNAMETEXTID,
+            message: ERROR_MESSAGE.FULL_NAME_MESSAGE.REQUIRED,
+            errorTextId: ERROR_TEXT_ID.FULL_NAME_TEXT_ID,
             targetInputName: event.target.name,
           });
         }
@@ -187,8 +187,8 @@ const changeHandler = (event) => {
         if (value.length === 0) {
           isFieldHaveError({
             isError: true,
-            message: ERRORMESSAGE.EMAILMESSAGE.REQUIRED,
-            errorTextId: ERRORTEXTID.EMAILTEXTID,
+            message: ERROR_MESSAGE.EMAIL_MESSAGE.REQUIRED,
+            errorTextId: ERROR_TEXT_ID.EMAIL_TEXT_ID,
             targetInputName: event.target.name,
           });
         }
@@ -199,8 +199,8 @@ const changeHandler = (event) => {
         if (value.length === 0) {
           isFieldHaveError({
             isError: true,
-            message: ERRORMESSAGE.PASSWORDMESSAGE.REQUIRED,
-            errorTextId: ERRORTEXTID.PASSWORDTEXTID,
+            message: ERROR_MESSAGE.PASSWORD_MESSAGE.REQUIRED,
+            errorTextId: ERROR_TEXT_ID.PASSWORD_TEXT_ID,
             targetInputName: event.target.name,
           });
         }

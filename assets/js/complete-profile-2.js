@@ -1,6 +1,6 @@
-const ERRORMESSAGE = "Bank number should have 15 character";
-const ERRORTEXTID = "bvn-error-text";
-const FORMISVALID = "formIsValid";
+const ERROR_MESSAGE = "Bank number should have 15 character";
+const ERROR_TEXT_ID = "bvn-error-text";
+const FORM_IS_VALID = "formIsValid";
 /**
  * declare all variable which initailize the element selected by getElementById
  */
@@ -24,7 +24,7 @@ const checkFormIsValid = () => {
   const totalFeilds = arrayOfKeys.length - 1;
   arrayOfKeys.forEach((element) => {
     if (
-      individualFormFieldValue[element] !== FORMISVALID &&
+      individualFormFieldValue[element] !== FORM_IS_VALID &&
       individualFormFieldValue[element].isValid
     )
       ++count;
@@ -66,14 +66,14 @@ const checkFeildIsValid = (event) => {
         if (value.length <= 15) {
           isFieldHaveError({
             isError: true,
-            message: ERRORMESSAGE,
-            errorTextId: ERRORTEXTID,
+            message: ERROR_MESSAGE,
+            errorTextId: ERROR_TEXT_ID,
             targetInputName: event.target.name,
           });
         } else {
           isFieldHaveError({
             isError: false,
-            errorTextId: ERRORTEXTID,
+            errorTextId: ERROR_TEXT_ID,
             targetInputName: event.target.name,
           });
         }
@@ -94,8 +94,8 @@ const changeHandler = (event) => {
         if (value.length === 0) {
           isFieldHaveError({
             isError: true,
-            message: ERRORMESSAGE,
-            errorTextId: ERRORTEXTID,
+            message: ERROR_MESSAGE,
+            errorTextId: ERROR_TEXT_ID,
             targetInputName: event.target.name,
           });
         }

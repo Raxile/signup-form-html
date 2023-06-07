@@ -1,17 +1,17 @@
-const FORMISVALID = "formIsValid";
-const ERRORTEXTID = {
-  ADDRESSTEXTID: "address-error-text",
-  COUNTRYTEXTID: "country-error-text",
-  PHONETEXTID: "phone-error-text",
+const FORM_IS_VALID = "formIsValid";
+const ERROR_TEXT_ID = {
+  ADDRESS_TEXT_ID: "address-error-text",
+  COUNTRY_TEXT_ID: "country-error-text",
+  PHONE_TEXT_ID: "phone-error-text",
 };
-const ERRORMESSAGE = {
-  COUNTRYMESSAGE: "Select a country",
-  ADDRESSMESSAGE: {
+const ERROR_MESSAGE = {
+  COUNTRY_MESSAGE: "Select a country",
+  ADDRESS_MESSAGE: {
     MIN: "address should have atleast 3 character",
     REQUIRED: "Address is required",
   },
 
-  PHONENUMBERMESSAGE: {
+  PHONE_NUMBER_MESSAGE: {
     REQUIRED: "Phone number is required",
     VALID: "Enter valid Phone number",
   },
@@ -45,7 +45,7 @@ const checkFormIsValid = () => {
   const totalFeilds = arrayOfKeys.length - 1;
   arrayOfKeys.forEach((element) => {
     if (
-      individualFormFieldValue[element] !== FORMISVALID &&
+      individualFormFieldValue[element] !== FORM_IS_VALID &&
       individualFormFieldValue[element].isValid
     )
       ++count;
@@ -83,14 +83,14 @@ const checkFeildIsValid = (event) => {
         if (value.length <= 3) {
           isFieldHaveError({
             isError: true,
-            message: ERRORMESSAGE.ADDRESSMESSAGE.MIN,
-            errorTextId: ERRORTEXTID.ADDRESSTEXTID,
+            message: ERROR_MESSAGE.ADDRESS_MESSAGE.MIN,
+            errorTextId: ERROR_TEXT_ID.ADDRESS_TEXT_ID,
             targetInputName: event.target.name,
           });
         } else {
           isFieldHaveError({
             isError: false,
-            errorTextId: ERRORTEXTID.ADDRESSTEXTID,
+            errorTextId: ERROR_TEXT_ID.ADDRESS_TEXT_ID,
             targetInputName: event.target.name,
           });
         }
@@ -101,14 +101,14 @@ const checkFeildIsValid = (event) => {
         if (!value) {
           isFieldHaveError({
             isError: true,
-            message: ERRORMESSAGE.COUNTRYMESSAGE,
-            errorTextId: ERRORTEXTID.COUNTRYTEXTID,
+            message: ERROR_MESSAGE.COUNTRY_MESSAGE,
+            errorTextId: ERROR_TEXT_ID.COUNTRY_TEXT_ID,
             targetInputName: event.target.name,
           });
         } else {
           isFieldHaveError({
             isError: false,
-            errorTextId: ERRORTEXTID.COUNTRYTEXTID,
+            errorTextId: ERROR_TEXT_ID.COUNTRY_TEXT_ID,
             targetInputName: event.target.name,
           });
         }
@@ -126,12 +126,12 @@ const checkFeildIsValid = (event) => {
         console.log(value.length);
         const targetField = document.getElementById("phone");
         if (value.length !== 10) {
-          document.getElementById(ERRORTEXTID.PHONETEXTID).innerHTML =
-            ERRORMESSAGE.PHONENUMBERMESSAGE.VALID;
+          document.getElementById(ERROR_TEXT_ID.PHONE_TEXT_ID).innerHTML =
+            ERROR_MESSAGE.PHONE_NUMBER_MESSAGE.VALID;
           targetField.classList.add("input-border-red");
           individualFormFieldValue.phoneNumber.isValid = false;
         } else {
-          document.getElementById(ERRORTEXTID.PHONETEXTID).innerHTML = "";
+          document.getElementById(ERROR_TEXT_ID.PHONE_TEXT_ID).innerHTML = "";
           targetField.classList.remove("input-border-red");
           individualFormFieldValue.phoneNumber.isValid = true;
         }
@@ -151,8 +151,8 @@ const changeHandler = (event) => {
       {
         if (value.length === 0) {
           const targetField = document.getElementById("phone");
-          document.getElementById(ERRORTEXTID.PHONETEXTID).innerHTML =
-            ERRORMESSAGE.PHONENUMBERMESSAGE.REQUIRED;
+          document.getElementById(ERROR_TEXT_ID.PHONE_TEXT_ID).innerHTML =
+            ERROR_MESSAGE.PHONE_NUMBER_MESSAGE.REQUIRED;
           targetField.classList.add("input-border-red");
           individualFormFieldValue.phoneNumber.isValid = false;
         }
@@ -163,7 +163,7 @@ const changeHandler = (event) => {
         if (value.length === 0) {
           isFieldHaveError({
             isError: true,
-            message: ADDRESSMESSAGE.VALID,
+            message: ADDRESS_MESSAGE.VALID,
             errorTextId: "address-error-text",
             targetInputName: event.target.name,
           });

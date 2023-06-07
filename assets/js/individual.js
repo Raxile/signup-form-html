@@ -1,3 +1,12 @@
+const FULL_NAME = "fullName";
+const EMAIL = "email";
+const PASSWORD = "password";
+const TERMS_AND_CONDITION = "termsAndCondition";
+const FORM_ID = "individual-form-step-1";
+const INPUT_BORDER_RED_CLASS = "input-border-red";
+const SWITCH_DEFAULT_MESSAGE = "Default";
+const LOCAL_STORAGE_KEY = "step-2";
+const NEXT_PAGE_LINK = "/complete-profile.html";
 const FORM_IS_VALID = "formIsValid";
 const FULL_NAME_REGEX = /^[A-Za-z ]{3,20}$/;
 const EMAIL_REGEX = /^\S+@+\S+.+\S+$/;
@@ -22,7 +31,9 @@ const ERROR_MESSAGE = {
     REQUIRED: "Password is required",
     VALID: "Please enter a strong Password",
   },
+  FORM_ERROR_MESSAGE: "try submit form without filling",
 };
+const DEFAULT_MESSAGE = "default";
 /**
  * individualFormFieldValue is a object that stores the value of each field and also indicates each feild is valid or form is valid or not
  */
@@ -36,11 +47,11 @@ let individualFormFieldValue = {
 /**
  * declare all variable which initailize the element selected by getElementById
  */
-const fullName = document.getElementById("fullName");
-const email = document.getElementById("email");
-const password = document.getElementById("password");
-const termsAndCondition = document.getElementById("termsAndCondition");
-const registerForm = document.getElementById("individual-form-step-1");
+const fullName = document.getElementById(FULL_NAME);
+const email = document.getElementById(EMAIL);
+const password = document.getElementById(PASSWORD);
+const termsAndCondition = document.getElementById(TERMS_AND_CONDITION);
+const registerForm = document.getElementById(FORM_ID);
 
 /**
  * checkFormIsValid checks the all feild is valid so form is valid
@@ -65,7 +76,7 @@ const checkFormIsValid = () => {
 
 /**
  * isFieldHaveError function if input field have error so return error or otherwise set Feild is valid
- * @param {*this object error ,message ,errorTextId,targetInputName} inputFieldObj
+ * @param {object} inputFieldObj *this object error ,message ,errorTextId,targetInputName
  */
 
 const isFieldHaveError = (inputFieldObj) => {
@@ -73,23 +84,22 @@ const isFieldHaveError = (inputFieldObj) => {
   const targetField = document.getElementById(targetInputName);
   if (isError) {
     document.getElementById(errorTextId).innerHTML = message;
-    targetField.classList.add("input-border-red");
+    targetField.classList.add(INPUT_BORDER_RED_CLASS);
     individualFormFieldValue[targetInputName].isValid = false;
   } else {
     document.getElementById(errorTextId).innerHTML = "";
-    targetField.classList.remove("input-border-red");
+    targetField.classList.remove(INPUT_BORDER_RED_CLASS);
     individualFormFieldValue[targetInputName].isValid = true;
   }
-  checkFormIsValid();
 };
 /**
  * checkFeildIsValid function called when change occured in any input
- * @param {*this event is passed through addEventListener function } event
+ * @param event *this event is passed through addEventListener function
  */
 const checkFeildIsValid = (event) => {
   const { value } = individualFormFieldValue[event.target.name];
   switch (event.target.name) {
-    case "fullName":
+    case FULL_NAME:
       {
         if (!FULL_NAME_REGEX.test(value)) {
           isFieldHaveError({
@@ -98,6 +108,7 @@ const checkFeildIsValid = (event) => {
             errorTextId: ERROR_TEXT_ID.FULL_NAME_TEXT_ID,
             targetInputName: event.target.name,
           });
+          checkFormIsValid();
         } else if (value.length <= 3) {
           isFieldHaveError({
             isError: true,
@@ -105,6 +116,7 @@ const checkFeildIsValid = (event) => {
             errorTextId: ERROR_TEXT_ID.FULL_NAME_TEXT_ID,
             targetInputName: event.target.name,
           });
+          checkFormIsValid();
         } else if (value.length >= 20) {
           isFieldHaveError({
             isError: true,
@@ -112,16 +124,18 @@ const checkFeildIsValid = (event) => {
             errorTextId: ERROR_TEXT_ID.FULL_NAME_TEXT_ID,
             targetInputName: event.target.name,
           });
+          checkFormIsValid();
         } else {
           isFieldHaveError({
             isError: false,
             errorTextId: ERROR_TEXT_ID.FULL_NAME_TEXT_ID,
             targetInputName: event.target.name,
           });
+          checkFormIsValid();
         }
       }
       break;
-    case "email":
+    case EMAIL:
       {
         if (!EMAIL_REGEX.test(value)) {
           isFieldHaveError({
@@ -130,6 +144,7 @@ const checkFeildIsValid = (event) => {
             errorTextId: ERROR_TEXT_ID.EMAIL_TEXT_ID,
             targetInputName: event.target.name,
           });
+          checkFormIsValid();
         } else {
           isFieldHaveError({
             isError: false,
@@ -139,7 +154,7 @@ const checkFeildIsValid = (event) => {
         }
       }
       break;
-    case "password":
+    case PASSWORD:
       {
         if (value.length < 8) {
           isFieldHaveError({
@@ -148,72 +163,32 @@ const checkFeildIsValid = (event) => {
             message: ERROR_MESSAGE.PASSWORD_MESSAGE.VALID,
             targetInputName: event.target.name,
           });
+          checkFormIsValid();
         } else {
           isFieldHaveError({
             isError: false,
             errorTextId: ERROR_TEXT_ID.PASSWORD_TEXT_ID,
             targetInputName: event.target.name,
           });
+          checkFormIsValid();
         }
       }
       break;
     default:
-      console.log("default");
+      console.log(SWITCH_DEFAULT_MESSAGE);
   }
 };
 /**
  * changeHandler function called when change occured in any input
- * @param {*this event is passed through addEventListener function } event
+ * @param event *this event is passed through addEventListener function
  */
 const changeHandler = (event) => {
   individualFormFieldValue[event.target.name].value = event.target.value;
-
-  const { value } = individualFormFieldValue[event.target.name];
-  switch (event.target.name) {
-    case "fullName":
-      {
-        if (value.length === 0) {
-          isFieldHaveError({
-            isError: true,
-            message: ERROR_MESSAGE.FULL_NAME_MESSAGE.REQUIRED,
-            errorTextId: ERROR_TEXT_ID.FULL_NAME_TEXT_ID,
-            targetInputName: event.target.name,
-          });
-        }
-      }
-      break;
-    case "email":
-      {
-        if (value.length === 0) {
-          isFieldHaveError({
-            isError: true,
-            message: ERROR_MESSAGE.EMAIL_MESSAGE.REQUIRED,
-            errorTextId: ERROR_TEXT_ID.EMAIL_TEXT_ID,
-            targetInputName: event.target.name,
-          });
-        }
-      }
-      break;
-    case "password":
-      {
-        if (value.length === 0) {
-          isFieldHaveError({
-            isError: true,
-            message: ERROR_MESSAGE.PASSWORD_MESSAGE.REQUIRED,
-            errorTextId: ERROR_TEXT_ID.PASSWORD_TEXT_ID,
-            targetInputName: event.target.name,
-          });
-        }
-      }
-      break;
-    default:
-      console.log("default");
-  }
 };
 
 /**
  * handleSubmitEvent will call when form in submitted
- * @param {*this event is passed through addEventListener function} event
+ * @param event *this event is passed through addEventListener function
  */
 const handleSubmitEvent = (event) => {
   event.preventDefault();
@@ -227,15 +202,40 @@ const handleSubmitEvent = (event) => {
       termsAndCondition: termsAndCondition.value,
     };
     console.log(formValue);
-    localStorage.setItem("step-2", JSON.stringify(formValue));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(formValue));
 
-    window.location.href = "/complete-profile.html";
+    window.location.href = NEXT_PAGE_LINK;
   } else {
-    console.log("error : try submit form without filling");
+    console.log({ Error: ERROR_MESSAGE.FORM_ERROR_MESSAGE });
+
+    if (individualFormFieldValue.fullName.value.length === 0) {
+      isFieldHaveError({
+        isError: true,
+        message: ERROR_MESSAGE.FULL_NAME_MESSAGE.REQUIRED,
+        errorTextId: ERROR_TEXT_ID.FULL_NAME_TEXT_ID,
+        targetInputName: FULL_NAME,
+      });
+    }
+    if (individualFormFieldValue.email.value.length === 0) {
+      isFieldHaveError({
+        isError: true,
+        message: ERROR_MESSAGE.EMAIL_MESSAGE.REQUIRED,
+        errorTextId: ERROR_TEXT_ID.EMAIL_TEXT_ID,
+        targetInputName: EMAIL,
+      });
+    }
+    if (individualFormFieldValue.fullName.value.length === 0) {
+      isFieldHaveError({
+        isError: true,
+        message: ERROR_MESSAGE.PASSWORD_MESSAGE.REQUIRED,
+        errorTextId: ERROR_TEXT_ID.PASSWORD_TEXT_ID,
+        targetInputName: PASSWORD,
+      });
+    }
   }
 };
 /**
- * callback function call when change and blur event call
+ * callback function (changeHandler and checkFeildIsValid) call when change and blur event call
  */
 fullName.addEventListener("change", changeHandler);
 fullName.addEventListener("blur", checkFeildIsValid);
@@ -252,4 +252,4 @@ termsAndCondition.addEventListener("change", (event) => {
   checkFormIsValid();
 });
 
-registerForm.addEventListener("submit", (e) => handleSubmitEvent(e));
+registerForm.addEventListener("submit", handleSubmitEvent);

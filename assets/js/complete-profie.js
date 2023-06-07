@@ -1,4 +1,13 @@
+const PHONE_CODE = "phoneCode";
+const ADDRESS = "address";
+const PHONE_NUMBER = "phoneNumber";
+const COUNTRY = "country";
+const FORM_ID = "completeProfile";
+const PHONE_CLASS = "phone";
 const FORM_IS_VALID = "formIsValid";
+const NEXT_PAGE_LINK = "/complete-profile-2.html";
+const INPUT_BORDER_RED_CLASS = "input-border-red";
+const LOCAL_STORAGE_KEY = "step-3";
 const ERROR_TEXT_ID = {
   ADDRESS_TEXT_ID: "address-error-text",
   COUNTRY_TEXT_ID: "country-error-text",
@@ -15,7 +24,9 @@ const ERROR_MESSAGE = {
     REQUIRED: "Phone number is required",
     VALID: "Enter valid Phone number",
   },
+  FORM_ERROR_MESSAGE: "try submit form without filling",
 };
+const DEFAULT_MESSAGE = "default";
 
 /**
  * individualFormFieldValue is a object that stores the value of each field and also indicates each feild is valid or form is valid or not
@@ -30,11 +41,11 @@ let individualFormFieldValue = {
 /**
  * declare all variable which initailize the element selected by getElementById
  */
-const phoneCode = document.getElementById("phoneCode");
-const address = document.getElementById("address");
-const phoneNumber = document.getElementById("phoneNumber");
-const registerForm = document.getElementById("completeProfile");
-const country = document.getElementById("country");
+const phoneCode = document.getElementById(PHONE_CODE);
+const address = document.getElementById(ADDRESS);
+const phoneNumber = document.getElementById(PHONE_NUMBER);
+const country = document.getElementById(COUNTRY);
+const registerForm = document.getElementById(FORM_ID);
 
 /**
  * checkFormIsValid checks the all feild is valid so form is valid
@@ -56,29 +67,32 @@ const checkFormIsValid = () => {
     individualFormFieldValue.formIsValid = false;
   }
 };
+
 /**
  * isFieldHaveError function if input field have error so return error or otherwise set Feild is valid
- * @param {*this object error ,message ,errorTextId,targetInputName} inputFieldObj
+ * @param {object} inputFieldObj *this object error ,message ,errorTextId,targetInputName
  */
 const isFieldHaveError = (inputFieldObj) => {
   const { isError, message, errorTextId, targetInputName } = inputFieldObj;
   const targetFeild = document.getElementById(targetInputName);
   if (isError) {
     document.getElementById(errorTextId).innerHTML = message;
-    targetFeild.classList.add("input-border-red");
+    targetFeild.classList.add(INPUT_BORDER_RED_CLASS);
     individualFormFieldValue[targetInputName].isValid = false;
   } else {
     document.getElementById(errorTextId).innerHTML = "";
-    targetFeild.classList.remove("input-border-red");
+    targetFeild.classList.remove(INPUT_BORDER_RED_CLASS);
     individualFormFieldValue[targetInputName].isValid = true;
   }
-  checkFormIsValid();
 };
-
+/**
+ * checkFeildIsValid function called when change occured in any input
+ * @param event *this event is passed through addEventListener function
+ */
 const checkFeildIsValid = (event) => {
   const { value } = individualFormFieldValue[event.target.name];
   switch (event.target.name) {
-    case "address":
+    case ADDRESS:
       {
         if (value.length <= 3) {
           isFieldHaveError({
@@ -87,16 +101,18 @@ const checkFeildIsValid = (event) => {
             errorTextId: ERROR_TEXT_ID.ADDRESS_TEXT_ID,
             targetInputName: event.target.name,
           });
+          checkFormIsValid();
         } else {
           isFieldHaveError({
             isError: false,
             errorTextId: ERROR_TEXT_ID.ADDRESS_TEXT_ID,
             targetInputName: event.target.name,
           });
+          checkFormIsValid();
         }
       }
       break;
-    case "country":
+    case COUNTRY:
       {
         if (!value) {
           isFieldHaveError({
@@ -105,79 +121,92 @@ const checkFeildIsValid = (event) => {
             errorTextId: ERROR_TEXT_ID.COUNTRY_TEXT_ID,
             targetInputName: event.target.name,
           });
+          checkFormIsValid();
         } else {
           isFieldHaveError({
             isError: false,
             errorTextId: ERROR_TEXT_ID.COUNTRY_TEXT_ID,
             targetInputName: event.target.name,
           });
+          checkFormIsValid();
         }
       }
       break;
-    case "phoneCode":
+    case PHONE_CODE:
       {
         if (value) {
           individualFormFieldValue.phoneCode.isValid = true;
         }
       }
       break;
-    case "phoneNumber":
+    case PHONE_NUMBER:
       {
         console.log(value.length);
-        const targetField = document.getElementById("phone");
+        const targetField = document.getElementById(PHONE_CLASS);
         if (value.length !== 10) {
           document.getElementById(ERROR_TEXT_ID.PHONE_TEXT_ID).innerHTML =
             ERROR_MESSAGE.PHONE_NUMBER_MESSAGE.VALID;
-          targetField.classList.add("input-border-red");
+          targetField.classList.add(INPUT_BORDER_RED_CLASS);
           individualFormFieldValue.phoneNumber.isValid = false;
+          checkFormIsValid();
         } else {
           document.getElementById(ERROR_TEXT_ID.PHONE_TEXT_ID).innerHTML = "";
-          targetField.classList.remove("input-border-red");
+          targetField.classList.remove(INPUT_BORDER_RED_CLASS);
           individualFormFieldValue.phoneNumber.isValid = true;
+          checkFormIsValid();
         }
       }
       break;
     default:
-      console.log("default");
+      console.log(DEFAULT_MESSAGE);
   }
 };
+/**
+ * changeHandler function called when change occured in any input
+ * @param event *this event is passed through addEventListener function
+ */
 const changeHandler = (event) => {
-  console.log(event.target.name);
   individualFormFieldValue[event.target.name].value = event.target.value;
 
   const { value } = individualFormFieldValue[event.target.name];
   switch (event.target.name) {
-    case "phoneNumber":
+    case PHONE_NUMBER:
       {
         if (value.length === 0) {
-          const targetField = document.getElementById("phone");
+          const targetField = document.getElementById(PHONE_CLASS);
           document.getElementById(ERROR_TEXT_ID.PHONE_TEXT_ID).innerHTML =
             ERROR_MESSAGE.PHONE_NUMBER_MESSAGE.REQUIRED;
-          targetField.classList.add("input-border-red");
+          targetField.classList.add(INPUT_BORDER_RED_CLASS);
           individualFormFieldValue.phoneNumber.isValid = false;
+          checkFormIsValid();
         }
       }
       break;
-    case "address":
+    case ADDRESS:
       {
         if (value.length === 0) {
           isFieldHaveError({
             isError: true,
-            message: ADDRESS_MESSAGE.VALID,
-            errorTextId: "address-error-text",
+            message: ERROR_MESSAGE.ADDRESS_MESSAGE.REQUIRED,
+            errorTextId: ERROR_TEXT_ID.ADDRESS_TEXT_ID,
             targetInputName: event.target.name,
           });
+          checkFormIsValid();
         }
       }
       break;
     default:
-      console.log("default");
+      console.log(DEFAULT_MESSAGE);
   }
 };
 
+/**
+ * handleSubmitEvent will call when form in submitted
+ * @param event *this event is passed through addEventListener function
+ */
 const handleSubmitEvent = (e) => {
-  console.log(individualFormFieldValue);
   e.preventDefault();
+  console.log(individualFormFieldValue);
   const { formIsValid, phoneCode, phoneNumber, address, country } =
     individualFormFieldValue;
   if (formIsValid) {
@@ -188,14 +217,31 @@ const handleSubmitEvent = (e) => {
       country: country.value,
     };
     console.log(formValue);
-    localStorage.setItem("step-3", JSON.stringify(formValue));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(formValue));
 
-    window.location.href = "/complete-profile-2.html";
+    window.location.href = NEXT_PAGE_LINK;
   } else {
-    console.log("error : try submit form without filling");
+    console.log({ ERROR: ERROR_MESSAGE.FORM_ERROR_MESSAGE });
+    if (individualFormFieldValue.address.value.length === 0) {
+      isFieldHaveError({
+        isError: true,
+        message: ERROR_MESSAGE.ADDRESS_MESSAGE.REQUIRED,
+        errorTextId: ERROR_TEXT_ID.ADDRESS_TEXT_ID,
+        targetInputName: ADDRESS,
+      });
+    }
+    if (individualFormFieldValue.phoneNumber.value.length === 0) {
+      const targetField = document.getElementById(PHONE_CLASS);
+      document.getElementById(ERROR_TEXT_ID.PHONE_TEXT_ID).innerHTML =
+        ERROR_MESSAGE.PHONE_NUMBER_MESSAGE.REQUIRED;
+      targetField.classList.add(INPUT_BORDER_RED_CLASS);
+      individualFormFieldValue.phoneNumber.isValid = false;
+    }
   }
 };
-
+/**
+ * callback function (changeHandler and checkFeildIsValid) call when change and blur event call
+ */
 phoneCode.addEventListener("change", changeHandler);
 phoneCode.addEventListener("blur", checkFeildIsValid);
 
@@ -208,4 +254,4 @@ address.addEventListener("blur", checkFeildIsValid);
 country.addEventListener("change", changeHandler);
 country.addEventListener("blur", checkFeildIsValid);
 
-registerForm.addEventListener("submit", (e) => handleSubmitEvent(e));
+registerForm.addEventListener("submit", handleSubmitEvent);
